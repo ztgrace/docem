@@ -406,7 +406,10 @@ def interface_ask_user(embedding_info,paths):
 	print('\nFiles to be created %d' % num_of_files_result)
 
 	# To be sure that you want to create that amount of documents
-	answer = input('Continue?(y/n): ')
+	if not args.batch:
+		answer = input('Continue?(y/n): ')
+	else:
+		answer = 'y'
 	
 	if answer == 'n':
 		make_tmp_clean_again(paths,'original')
@@ -451,6 +454,7 @@ if __name__ == '__main__':
 	required.add_argument('-s', dest='sample', type=str, help='path to sample file')
 	required.add_argument('-pm', dest='payload_mode',type=str,choices=['xss','xxe'],help='payload mode: embedding XXE or XSS in a file')
 
+	optional.add_argument('-b', dest='batch', action='store_true', help='Do not prompt', default=False)
 	#optional.add_argument('-xu', dest='xxe_uri', type=str, help='URI to use in XXE payload - file as \'file:///etc/lsb-release\' or url as \'http://example.com\'')
 	optional.add_argument('-kt', dest='keep_tmp', action='store_true', help='do not delete unpacked and modified folders')
 	optional.add_argument('-pt', dest='payload_type', type=str, help='how many payloads will be in one file. per_document is default',choices=['per_place','per_file','per_document'],default='per_document')
